@@ -1,0 +1,9 @@
+Contact: mailto:security@bullexai.com
+Contact: https://t.me/kitekraken
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://www.bullexai.com/.well-known/security.txt
+
+# Security Policy
+# Report security vulnerabilities to security@bullexai.com
+# Please allow 2-3 business days for response

@@ -1,0 +1,21 @@
+# robots.txt for KiteKraken AI
+# Safe Browsing Compliance: Proper indexing guidance for search engines
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /api/
+Disallow: /auth/callback
+
+# Admin routes
+Disallow: /admin/*
+Disallow: /superadmin/*
+
+# API endpoints
+Disallow: /api/*
+
+# Authentication
+Disallow: /auth/callback
+
+Sitemap: https://www.bullexai.com/sitemap.xml

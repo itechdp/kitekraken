@@ -1,0 +1,188 @@
+/* KiteKraken AI - Elite Signals Style */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.App {
+    min-height: 100vh;
+    background: #111113;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar - Elite Signals Style */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111113;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2c2e;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #38FE60;
+}
+
+/* Selection color */
+::selection {
+    background: rgba(218, 255, 1, 0.3);
+    color: #ffffff;
+}
+
+/* Focus outline */
+*:focus-visible {
+    outline: 2px solid #38FE60;
+    outline-offset: 2px;
+}
+
+/* Disable blue highlight on mobile tap */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Animations */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(218, 255, 1, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(218, 255, 1, 0.5);
+    }
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-33.333%);
+    }
+}
+
+@keyframes scroll-testimonials {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-scroll {
+    display: flex;
+    animation: scroll 20s linear infinite;
+    width: fit-content;
+}
+
+.animate-scroll:hover {
+    animation-play-state: paused;
+}
+
+.animate-scroll-fast {
+    display: flex;
+    animation: scroll 15s linear infinite;
+    width: fit-content;
+}
+
+.animate-scroll-fast:hover {
+    animation-play-state: paused;
+}
+
+.animate-scroll-testimonials {
+    display: flex;
+    animation: scroll-testimonials 40s linear infinite;
+    width: fit-content;
+}
+
+/* Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+
+/* Utility classes */
+.text-balance {
+    text-wrap: balance;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #38FE60, #36FE60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Typography matching Elite Signals */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Button hover effects */
+button, .button {
+    transition: all 0.2s ease;
+}
+
+button:hover, .button:hover {
+    transform: translateY(-2px);
+}
