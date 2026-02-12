@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowDownRight, ArrowRight, TrendingUp, Calendar, Timer, 
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import RiskDisclaimerBanner from '../components/RiskDisclaimerBanner';
 const Backtesting = () => {
   const [activeTab, setActiveTab] = useState('performance');
   const navigate = useNavigate();
