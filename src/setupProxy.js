@@ -8,7 +8,7 @@ module.exports = function(app) {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/api/webhook': '/webhook-test/d2d76a5e-3873-4478-959f-ef5bc7c513f7',
+        '^/api/webhook': '/webhook/d2d76a5e-3873-4478-959f-ef5bc7c513f7',
       },
       onProxyReq: function(proxyReq, req, res) {
         proxyReq.setHeader('Accept', 'application/json');
