@@ -766,7 +766,7 @@ const SuperAdmin = () => {
                   setShowCloseAllDialog(true);
                 }}
                 disabled={loading || users.length === 0}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
               >
                 <X className="w-4 h-4 mr-2" />
                 Close All Positions
@@ -774,7 +774,7 @@ const SuperAdmin = () => {
               <Button
                 onClick={() => setShowOpenAllDialog(true)}
                 disabled={loading || users.length === 0}
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold"
               >
                 <TrendingUp className="w-4 h-4 mr-2" />
                 Open All Positions
@@ -782,7 +782,7 @@ const SuperAdmin = () => {
               <Button
                 onClick={fetchAllPositions}
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
