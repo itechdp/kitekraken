@@ -29,6 +29,14 @@ const SuperAdmin = () => {
   const [closingPosition, setClosingPosition] = useState(false);
   const [showCloseAllDialog, setShowCloseAllDialog] = useState(false);
   const [closingAllPositions, setClosingAllPositions] = useState(false);
+  const [showOpenAllDialog, setShowOpenAllDialog] = useState(false);
+  const [openingAllPositions, setOpeningAllPositions] = useState(false);
+  const [openFormData, setOpenFormData] = useState({
+    strikePrice: '',
+    entryDate: '',
+    expiry: '',
+    optionType: 'C' // C for Call, P for Put
+  });
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [error, setError] = useState(null);
   const [showDebug, setShowDebug] = useState(false);
@@ -354,6 +362,90 @@ const SuperAdmin = () => {
   }, []);
 
   // Close position function
+  // Open all positions for all users
+  const openAllPositions = async () => {
+    setOpeningAllPositions(true);
+    try {
+      console.log('===== STARTING OPEN ALL POSITIONS FLOW =====');
+      console.log('Form data:', openFormData);
+      
+      // Validate form data
+      if (!openFormData.strikePrice || !openFormData.entryDate || !openFormData.expiry || !openFormData.optionType) {
+        alert('Please fill in all required fields (Strike Price, Entry Date, Expiry, Option Type)');
+        setOpeningAllPositions(false);
+        return;
+      }
+      
+      // Prepare payload
+      const payload = {
+        strike_price: parseFloat(openFormData.strikePrice),
+        entry_date: openFormData.entryDate,
+        expiry: openFormData.expiry,
+        option_type: openFormData.optionType
+      };
+      
+      console.log('===== OPEN ALL POSITIONS WEBHOOK CALL =====');
+      console.log('Webhook URL:', 'https://n8n.srv1103655.hstgr.cloud/webhook/215f76b2-71b9-4624-a445-2e1845d67497');
+      console.log('Method: POST');
+      console.log('Payload:', payload);
+      
+      // Call n8n webhook to open all positions
+      const response = await fetch('https://n8n.srv1103655.hstgr.cloud/webhook/215f76b2-71b9-4624-a445-2e1845d67497', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      console.log('Response received:');
+      console.log('Status:', response.status);
+      console.log('Status Text:', response.statusText);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ n8n webhook error response:', errorText);
+        console.log('===== OPEN ALL POSITIONS FAILED =====');
+        throw new Error(`Webhook request failed: ${response.status} - ${errorText}`);
+      }
+      
+      const responseText = await response.text();
+      console.log('Raw response text:', responseText);
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('✅ Parsed response JSON:', result);
+      } catch (parseError) {
+        console.log('⚠️ Response is not JSON:', responseText);
+        result = { raw: responseText };
+      }
+      
+      console.log('===== OPEN ALL POSITIONS SUCCESS =====');
+      
+      setShowOpenAllDialog(false);
+      setOpenFormData({
+        strikePrice: '',
+        entryDate: '',
+        expiry: '',
+        optionType: 'C'
+      });
+      
+      console.log('✅ Open all positions request completed successfully');
+      console.log('===== OPEN ALL POSITIONS FLOW COMPLETE =====');
+      alert(`Successfully sent open positions request with Strike Price: ${openFormData.strikePrice}, Entry Date: ${openFormData.entryDate}, Expiry: ${openFormData.expiry}, Type: ${openFormData.optionType}`);
+    } catch (error) {
+      console.error('===== OPEN ALL POSITIONS ERROR =====');
+      console.error('Error type:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      alert(`Failed to open all positions: ${error.message}`);
+    } finally {
+      setOpeningAllPositions(false);
+    }
+  };
+
   // Close all positions for all users
   const closeAllPositions = async () => {
     setClosingAllPositions(true);
@@ -678,6 +770,14 @@ const SuperAdmin = () => {
               >
                 <X className="w-4 h-4 mr-2" />
                 Close All Positions
+              </Button>
+              <Button
+                onClick={() => setShowOpenAllDialog(true)}
+                disabled={loading || users.length === 0}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Open All Positions
               </Button>
               <Button
                 onClick={fetchAllPositions}
@@ -1156,6 +1256,113 @@ const SuperAdmin = () => {
                 <>
                   <X className="w-4 h-4 mr-2" />
                   Close All Positions
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Open All Positions Form Dialog */}
+      <AlertDialog open={showOpenAllDialog} onOpenChange={setShowOpenAllDialog}>
+        <AlertDialogContent className="bg-[#1a1c1e] border-[#2a2c2e]">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-green-500" />
+              Open All Positions
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Enter the parameters to open positions for all users.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          <div className="bg-[#0a0b0d] rounded-lg p-4 my-4 space-y-4">
+            {/* Strike Price Input */}
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">
+                Strike Price
+              </label>
+              <input
+                type="number"
+                placeholder="Enter strike price"
+                step="0.01"
+                value={openFormData.strikePrice}
+                onChange={(e) => setOpenFormData({ ...openFormData, strikePrice: e.target.value })}
+                className="w-full px-3 py-2 bg-[#1a1c1e] border border-[#2a2c2e] rounded text-white placeholder-gray-500 focus:outline-none focus:border-green-500"
+              />
+            </div>
+
+            {/* Entry Date Input */}
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">
+                Entry Date/Time
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., 2024-03-31 or 2024-03-31 15:30:00"
+                value={openFormData.entryDate}
+                onChange={(e) => setOpenFormData({ ...openFormData, entryDate: e.target.value })}
+                className="w-full px-3 py-2 bg-[#1a1c1e] border border-[#2a2c2e] rounded text-white placeholder-gray-500 focus:outline-none focus:border-green-500"
+              />
+            </div>
+
+            {/* Expiry Input */}
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">
+                Expiry Date/Time
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., 2024-03-31 or 2024-03-31 15:30:00"
+                value={openFormData.expiry}
+                onChange={(e) => setOpenFormData({ ...openFormData, expiry: e.target.value })}
+                className="w-full px-3 py-2 bg-[#1a1c1e] border border-[#2a2c2e] rounded text-white placeholder-gray-500 focus:outline-none focus:border-green-500"
+              />
+            </div>
+
+            {/* Option Type Dropdown */}
+            <div>
+              <label className="block text-gray-300 text-sm font-medium mb-2">
+                Option Type
+              </label>
+              <select
+                value={openFormData.optionType}
+                onChange={(e) => setOpenFormData({ ...openFormData, optionType: e.target.value })}
+                className="w-full px-3 py-2 bg-[#1a1c1e] border border-[#2a2c2e] rounded text-white focus:outline-none focus:border-green-500"
+              >
+                <option value="C">Call (C)</option>
+                <option value="P">Put (P)</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+            <p className="text-green-400 text-sm flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+              <span>
+                <strong>Info:</strong> This will send an open positions request with the specified parameters to all {users.length} users via the n8n webhook.
+              </span>
+            </p>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-[#2a2c2e] text-white hover:bg-[#3a3c3e]">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={openAllPositions}
+              disabled={openingAllPositions || !openFormData.strikePrice || !openFormData.entryDate || !openFormData.expiry}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {openingAllPositions ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Opening All Positions...
+                </>
+              ) : (
+                <>
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Open All Positions
                 </>
               )}
             </AlertDialogAction>
